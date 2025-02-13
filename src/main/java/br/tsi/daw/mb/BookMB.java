@@ -40,8 +40,8 @@ public class BookMB implements Serializable {
         else
             bookDAO.update(book);
         
-        book = new Book(); // Reset the book object after adding/updating
-        listBooks = listAll(); // Refresh the list
+        book = new Book(); 
+        listBooks = listAll(); 
     }
     
     public List<Book> listAll() {

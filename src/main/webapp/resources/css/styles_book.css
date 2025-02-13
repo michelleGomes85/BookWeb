@@ -3,7 +3,7 @@
 .book {
 	border: 1px solid #ddd;
 	margin-bottom: 10px;
-	padding: 10px;
+	padding: 20px;
 	border-radius: 5px;
 	display: flex;
 	align-items: center;
@@ -21,6 +21,7 @@
 	color: #333;
 	border: 1px solid #ccc;
 	margin-right: 20px;
+	text-align: center;
 }
 
 .book-details {
@@ -70,4 +71,38 @@
 
 .book-status.unavailable {
 	color: red;
+}
+
+.book-actions {
+    display: flex;
+    gap: 10px; 
+}
+
+.book-actions {
+	display: flex;
+	flex-direction: column;
+}
+
+.ui-button-text-icon-left .ui-button-text {
+	padding: 10px 20px 10px 30px !important;
+}
+
+.ui-widget .ui-icon.pi, .ui-icon.pi {
+	font-size: 14px !important;
+}
+
+input[type=submit], button {
+	margin-left: 250px !important;
+}
+
+.ui-button-icon-only .ui-icon, .ui-button-text-icon-left .ui-icon, .ui-button-text-icon-right .ui-icon {
+	left: 15px !important;
+}
+
+.ui-spinner {
+	float: right;
+}
+
+.total-price {
+	text-align: right;
 }

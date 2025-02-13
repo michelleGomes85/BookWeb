@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
@@ -9,20 +8,22 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Cadastrar/Editar Livro</title>
+
 </head>
 
 <ui:composition template="_template.xhtml">
 
 	<ui:define name="corpo">
 		<h:outputScript name="jsf.js" library="jakarta.faces" target="head"></h:outputScript>
+		<h:outputScript name="script.js" library="js"/>
 
 		<div class="card">
 			<h:form>
 				<p:dataScroller value="#{bookMB.listBooks}" var="book"
 					chunkSize="10">
 					<f:facet name="header">
-                    Role para baixo para carregar mais livros
-                </f:facet>
+                        Role para baixo para carregar mais livros
+                    </f:facet>
 
 					<div class="book">
 						<!-- Capa do livro formatada com o nome do livro -->
@@ -44,8 +45,19 @@
 								#{book.available ? 'Disponível' : 'Indisponível'}</div>
 						</div>
 
-						<!-- Botão de ação -->
+						<!-- Botão de ação e Spinner -->
 						<div class="book-actions">
+							<div class="total-price">
+								<p:inputText id="totalPrice_#{book.id}" value="0,00"
+									readonly="true" />
+							</div>
+
+							<p:spinner id="spinner_#{book.id}" value="1" min="1"
+								max="#{book.quantityStock}" step="1" placeholder="1"
+								onmouseup="updateTotalPrice(this, #{book.price}, 'totalPrice_#{book.id}')"
+								onkeyup="updateTotalPrice(this, #{book.price}, 'totalPrice_#{book.id}')"
+								widgetVar="spinner_#{book.id}" />
+
 							<p:commandButton value="Adicionar ao Carrinho"
 								icon="pi pi-shopping-cart" disabled="#{!book.available}"
 								styleClass="p-button-success" />
