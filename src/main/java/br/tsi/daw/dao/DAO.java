@@ -40,7 +40,7 @@ public class DAO<T> {
 		em.close();
 	}
 	
-	public T buscaPorId(Long id) {
+	public T searchById(Long id) {
 		EntityManager em = new JPAUtil().getEntityManager();
 		return em.find(classDao, id);
 	}

@@ -1,5 +1,6 @@
 package br.tsi.daw.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ public class Category {
 	private String name;
 	
     @OneToMany(mappedBy = "category")
-	List<Book> books;
+	List<Book> books = new ArrayList<>();
 	
 	public Long getId() {
 		return id;

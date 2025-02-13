@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+      
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Cadastrar Categoria</title>
+	</head>
+	
+	<ui:composition template="_template.xhtml">
+		<ui:define name="corpo">
+			<h:outputScript name="jsf.js" library="jakarta.faces" target="head"></h:outputScript>
+			
+			<h:form id="register-category">
+			
+	            <h2>
+	                <h:outputText value="Nova Categoria" rendered="#{empty categoryMB.category.id}" />
+	                <h:outputText value="Editar Categoria" rendered="#{not empty categoryMB.category.id}" />
+	            </h2>
+	            
+            	<p:messages styleClass="erros" />
+            	
+	            <p:fieldset legend="Dados da Categoria">
+	            
+	                <!-- Campo para o nome da categoria -->
+	                <h:outputLabel value="Nome da Categoria" for="nome" />
+	                <p:inputText id="nome" value="#{categoryMB.category.name}" required="true" requiredMessage="O nome da categoria é obrigatório." />
+	
+	                <!-- Botões de ação -->
+	                <h:commandButton value="Cadastrar" action="#{categoryMB.addCategory}">
+	                    <f:ajax execute="@form" render=":register-category" />
+	                </h:commandButton>
+	                
+	                <h:commandButton value="Cancelar" action="#{categoryMB.cancel}">
+	                    <f:ajax render=":register-category" />
+	                </h:commandButton>
+	                
+	            </p:fieldset>
+        	</h:form>
+			
+		</ui:define>
+	</ui:composition>
+</html>

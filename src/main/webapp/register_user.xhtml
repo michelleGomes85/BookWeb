@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>
+            <h:outputText value="Dados Usuário"/>
+        </title>
+    </head>
+
+    <ui:composition template="_template.xhtml">
+    
+        <ui:define name="corpo">
+        
+            <h:outputScript name="jsf.js" library="jakarta.faces" target="head"/>
+
+            <h:form id="register-user">
+            
+            	<h2>
+					<h:outputText value="Cadastrar Funcionário"
+						rendered="#{userMB.admin}" />
+	
+					<h:outputText value="Registro"
+						rendered="#{not userMB.admin and empty userMB.user.id}" />
+	
+					<h:outputText value="Editar Dados"
+						rendered="#{not userMB.admin and not empty userMB.user.id}" />
+				</h2>
+
+                <p:messages styleClass="erros"/>
+
+                <!-- Dados do Cliente -->
+                <p:fieldset legend="Dados Pessoais">
+                
+                    <h:outputLabel value="Nome" for="nome"/>
+                    <p:inputText id="nome" value="#{userMB.user.client.name}" required="true" requiredMessage="O nome é obrigatório." />
+
+                    <h:outputLabel value="CPF" for="cpf"/>
+                    <p:inputMask id="cpf" value="#{userMB.user.client.cpf}" mask="999.999.999-99" required="true" requiredMessage="O CPF é obrigatório." />
+					
+                    <h:outputLabel value="E-mail" for="email"/>
+                    <p:inputText id="email" value="#{userMB.user.client.email}" disabled="#{not empty userMB.user.id and not userMB.admin}" required="true" requiredMessage="O e-mail é obrigatório." />
+
+                    <h:outputLabel value="Celular" for="celular"/>
+                    <p:inputMask id="celular" value="#{userMB.user.client.phoneNumber}" mask="(99) 99999-9999" required="true" requiredMessage="O celular é obrigatório." />
+                    
+                </p:fieldset>
+
+                <!-- Dados do Funcionário -->
+                <p:fieldset legend="Dados de Acesso">
+                    <h:outputLabel value="Login" for="login"/>
+                    <p:inputText id="login" value="#{userMB.user.login}" required="true" requiredMessage="O login é obrigatório." />
+
+                    <h:outputLabel value="Senha" for="senha"/>
+                    <p:password id="senha" value="#{userMB.user.password}" required="true" requiredMessage="A senha é obrigatória." />
+                </p:fieldset>
+
+                <!-- Botões dinâmicos -->
+                <p:commandButton value="Cadastrar" action="#{userMB.addUser}" update="register-user" rendered="#{empty userMB.user.id or userMB.admin}"/>
+                
+                <!-- Botões de Editar e Cancelar -->
+                <p:commandButton value="Editar" action="#{userMB.addUser}" update="register-user" rendered="#{not userMB.admin and not empty userMB.user.id}"/>
+                <p:commandButton value="Cancelar" action="#{userMB.cancelEdit}" update="register-user" rendered="#{not userMB.admin and not empty userMB.user.id}" immediate="true"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

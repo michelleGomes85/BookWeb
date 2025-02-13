@@ -29,7 +29,7 @@ li{
   height: 40px;
 }
 
-td.Média, td.Médio {
+td.Mï¿½dia, td.Mï¿½dio {
     background: rgba(158, 158, 158, 0.48);
     text-align: center;
     width: 60px;
@@ -344,10 +344,10 @@ table.dados tr td{
 
 .btn {
   display: inline-block;
-  *display: inline;
+  display: inline;
   padding: 4px 12px;
   margin-bottom: 0;
-  *margin-left: .3em;
+  margin-left: .3em;
   font-size: 12px;
   line-height: 12px;
   color: #333333;

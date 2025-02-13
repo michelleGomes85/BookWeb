@@ -1,5 +1,6 @@
 package br.tsi.daw.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -26,10 +27,10 @@ public class Client {
 	private String phoneNumber;
 	
     @OneToMany(mappedBy = "client")
-	private List<Order> orders;
+	private List<Order> orders = new ArrayList<>();
 	
     @OneToOne(mappedBy = "client")
-	private User userApp;
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -79,11 +80,11 @@ public class Client {
 		this.orders = orders;
 	}
 
-	public User getUserApp() {
-		return userApp;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserApp(User user) {
-		this.userApp = user;
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

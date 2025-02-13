@@ -22,7 +22,6 @@ public class ItemOrder {
 	private Long id;
 	
 	private int amount;
-	private double unitPrice;
 	private double totalPrice;
 	
     @ManyToOne
@@ -47,14 +46,6 @@ public class ItemOrder {
 
 	public void setAmount(int amount) {
 		this.amount = amount;
-	}
-
-	public double getUnitPrice() {
-		return unitPrice;
-	}
-
-	public void setUnitPrice(double unitPrice) {
-		this.unitPrice = unitPrice;
 	}
 
 	public double getTotalPrice() {

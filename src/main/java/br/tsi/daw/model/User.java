@@ -1,6 +1,7 @@
 package br.tsi.daw.model;
 
 import br.tsi.daw.enuns.Profile;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -27,7 +28,7 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Profile profile;
 	
-    @OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     private Client client;
 	

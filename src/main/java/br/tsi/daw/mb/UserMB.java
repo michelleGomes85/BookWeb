@@ -2,7 +2,10 @@ package br.tsi.daw.mb;
 
 import java.io.Serializable;
 
+import br.tsi.daw.dao.DAO;
 import br.tsi.daw.dao.UserDAO;
+import br.tsi.daw.enuns.Profile;
+import br.tsi.daw.model.Client;
 import br.tsi.daw.model.User;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
@@ -13,42 +16,83 @@ import jakarta.inject.Named;
 public class UserMB implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	private User user;
+	private User userSession;
+	private boolean admin;
 	
-	private User user = new User();
+    public UserMB() {
+        this.user = new User();
+        this.user.setClient(new Client());
+    }
+
+	public void addUser() {
+		
+		DAO<User> userDao = new DAO<>(User.class);
+		
+		if (user.getId() == null) {
+			user.setProfile((admin) ? Profile.FUNC : Profile.USER);
+			userDao.add(user);
+		}
+		else 
+			userDao.update(user);
+	}
 
 	public String login() {
-		
+
 		UserDAO userDao = new UserDAO();
-		
-		boolean exists = userDao.exists(user);
-		
-		if (exists) {
+		User loggedUser = userDao.findByLoginAndPassword(user);
+
+		if (loggedUser != null) {
+			userSession = loggedUser;
+			if (loggedUser.getProfile() != Profile.ADMIN) {
+				user = loggedUser;
+				if (user.getClient() == null)
+					user.setClient(new Client());
+				admin = false;
+			} else
+				admin = true;
+			
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogin", this.user);
 			return "library?faces-redirect=true";
-			
-		}else {
+		} else {
 			user = new User();
 			return "login?faces-redirect=true";
 		}
 	}
 	
 	public boolean isLogged() {
-		return user.getLogin() != null;
+		return userSession.getLogin() != null;
 	}
-	
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
 	public String logout() {
-		
+		userSession = new User();
 		user = new User();
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogin", null);
 		return "login?faces-redirect=true";
-		
 	}
-	
+
+	public String cancelEdit() {
+		return "user?faces-redirect=true";
+	}
+
 	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public User getUserSession() {
+		return userSession;
+	}
+
+	public void setUserSession(User userSession) {
+		this.userSession = userSession;
 	}
 }
