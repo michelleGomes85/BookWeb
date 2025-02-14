@@ -1,18 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>VitualLibrary</groupId>
-  <artifactId>VirtualLibrary</artifactId>
+  <groupId>LibraryVirtual</groupId>
+  <artifactId>LibraryVirtual</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
-
-  <build>
+<build>
     <plugins>
       <!-- Plugin para compilar o código Java -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <release>22</release> <!-- Define a versão do Java -->
+          <release>21</release> <!-- Define a versão do Java -->
         </configuration>
       </plugin>
 
@@ -39,7 +38,7 @@
     <jstl.version>1.2</jstl.version>
 
     <!-- Versão do Apache Tomcat (servidor de aplicação) -->
-    <tomcat.version>10.1.13</tomcat.version>
+    <tomcat.version>11.0.2</tomcat.version>
 
     <!-- Versão do CDI (Contexts and Dependency Injection) -->
     <cdi.version>3.0.0</cdi.version>

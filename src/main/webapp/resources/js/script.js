@@ -1,10 +1,7 @@
-function updateTotalPrice(spinner, price, totalInputClientId) {
-    let quantity = spinner.value || 1; // Se estiver vazio, assume 1
-    let total = quantity * price;
+console.log("Arquivo javaScript")
 
-    // Atualiza o campo de preço total
-    let totalInput = document.getElementById(totalInputClientId);
-    if (totalInput) {
-        totalInput.value = total.toFixed(2).replace('.', ',');
-    }
-}
+$(document).ready(function () {
+    console.log("jQuery e jQuery Mask Plugin carregados!");
+
+    $("#isbn-mask").mask("999-99-999-9999-9");
+});

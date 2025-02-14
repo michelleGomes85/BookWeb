@@ -1,26 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:f="http://java.sun.com/jsf/core"
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<h:outputStylesheet name="primefaces.css" library="primefaces" />
 <title>Cadastrar/Editar Livro</title>
-
 </head>
 
-<ui:composition template="_template.xhtml">
+<ui:composition template="/templates/_template.xhtml">
 
 	<ui:define name="corpo">
-		<h:outputScript name="jsf.js" library="jakarta.faces" target="head"></h:outputScript>
-		<h:outputScript name="script.js" library="js"/>
 
 		<div class="card">
-			<h:form>
-				<p:dataScroller value="#{bookMB.listBooks}" var="book"
-					chunkSize="10">
+			<h:form id="bookForm">
+			
+				<div class="header-coluns">
+
+					<div>
+						<!-- Campo de busca -->
+						<p:outputLabel for="searchBook" value="Buscar Livro:" />
+						<p:inputText id="searchBook" value="#{bookMB.searchTerm}">
+							<p:ajax event="keyup" update="bookList"
+								listener="#{bookMB.filterBooks}" />
+						</p:inputText>
+					</div>
+
+					<div>
+						<!-- Dropdown de categorias -->
+						<p:outputLabel for="categoryFilter" value="Filtrar por Categoria:" />
+						<p:selectOneMenu id="categoryFilter"
+							value="#{bookMB.selectedCategory}">
+							<f:selectItem itemLabel="Todas" itemValue="" />
+							<f:selectItems value="#{bookMB.categories}" var="category"
+								itemLabel="#{category.name}" itemValue="#{category.name}" />
+							<p:ajax event="change" update="bookList"
+								listener="#{bookMB.filterBooks}" />
+						</p:selectOneMenu>
+					</div>
+				</div>
+				
+				<p:dataScroller id="bookList" value="#{bookMB.filteredBooks}" var="book" chunkSize="10">
+
 					<f:facet name="header">
                         Role para baixo para carregar mais livros
                     </f:facet>
@@ -51,12 +76,6 @@
 								<p:inputText id="totalPrice_#{book.id}" value="0,00"
 									readonly="true" />
 							</div>
-
-							<p:spinner id="spinner_#{book.id}" value="1" min="1"
-								max="#{book.quantityStock}" step="1" placeholder="1"
-								onmouseup="updateTotalPrice(this, #{book.price}, 'totalPrice_#{book.id}')"
-								onkeyup="updateTotalPrice(this, #{book.price}, 'totalPrice_#{book.id}')"
-								widgetVar="spinner_#{book.id}" />
 
 							<p:commandButton value="Adicionar ao Carrinho"
 								icon="pi pi-shopping-cart" disabled="#{!book.available}"

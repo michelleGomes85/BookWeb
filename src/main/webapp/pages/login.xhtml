@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/_template.xhtml">
+
+	<ui:define name="corpo">
+	
+		<h:form id="login">
+			<h2>Entrar</h2>
+			
+			<!-- Div para estilização do campo -->
+			<div class="form-field">
+				<h:outputLabel value="Login" for="login" />
+				<p:inputText id="login" value="#{userMB.user.login}" />
+			</div>
+
+			<!-- Div para estilização do campo -->
+			<div class="form-field">
+				<h:outputLabel value="Senha" for="senha" />
+				<p:password id="toggle" value="#{userMB.user.password}" toggleMask="true" redisplay="true"
+			    passThrough="autocomplete" autocomplete="current-password"/>
+			</div>
+
+			<!-- Div para o botão de login -->
+			<div class="form-field">
+				<h:commandButton value="Logar" action="#{userMB.login}" styleClass="ui-button-outlined button-login">
+					<f:ajax execute="@form" render=":login" />
+				</h:commandButton>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

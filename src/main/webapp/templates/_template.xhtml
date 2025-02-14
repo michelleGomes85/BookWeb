@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Livraria Virtual</title>
+
+	<!-- PrimeFaces e estilos -->
+	<h:outputStylesheet name="styles_template.css" library="css" />
+	<h:outputStylesheet name="styles_book.css" library="css" />
+	<h:outputStylesheet name="styles_login.css" library="css" />
+</h:head>
+
+<h:body>
+	<div id="header">
+		<h:form>
+
+			<p:menubar styleClass="custom-menubar">
+
+				<!-- Logo -->
+				<p:menuitem value="Sistema E-Livros" url="library.xhtml"
+					icon="pi pi-home" styleClass="menu-left" />
+
+				<!-- Links do meio -->
+				<p:menuitem value="Categorias" url="categories.xhtml"
+					icon="pi pi-list" styleClass="menu-center" />
+				<p:menuitem value="Livros" url="books.xhtml" icon="pi pi-book"
+					styleClass="menu-center" />
+
+				<!-- Usuário não logado -->
+				<p:menuitem value="Fazer Login" action="#{userMB.login}"
+					rendered="#{empty userMB.user.login}" styleClass="menu-right">
+					<div class="icon">
+						<h:graphicImage name="user-login.png" library="images" />
+					</div>
+				</p:menuitem>
+
+				<p:menuitem value="#{userMB.user.login}"
+					rendered="#{not empty userMB.user.login}" styleClass="menu-right">
+					<div class="icon">
+						<h:graphicImage name="logged-in-user.png" library="images" />
+					</div>
+				</p:menuitem>
+
+				<p:menuitem value="Visualizar Dados" action="#{userMB.viewProfile}"
+					rendered="#{not empty userMB.user.login}" styleClass="menu-right" />
+				<p:menuitem value="Sair" action="#{userMB.logout}"
+					rendered="#{not empty userMB.user.login}" styleClass="menu-right" />
+			</p:menubar>
+		</h:form>
+	</div>
+
+	<div id="conteudo">
+		<ui:insert name="corpo"></ui:insert>
+	</div>
+
+	<!-- Footer -->
+	<h:panelGroup layout="block" styleClass="footer">
+		<div>
+			<div class="container">
+				<p>
+					Feito por <strong>Michelle Cristina Gomes</strong>
+				</p>
+				<p>Email: gmichele498@gmail.com</p>
+				<p class="icons-contact">
+					<a href="https://www.linkedin.com/in/michelleGomes85/"
+						target="_blank"> <i class="fab fa-linkedin"></i>
+					</a> | <a href="https://github.com/michelleGomes85" target="_blank">
+						<i class="fab fa-github"></i>
+					</a>
+				</p>
+				<p class="footer-text">Feito para a disciplina de
+					Desenvolvimento de Aplicação Web, graduação em Tecnologia em
+					Sistemas para Internet.</p>
+			</div>
+		</div>
+	</h:panelGroup>
+
+</h:body>
+</html>

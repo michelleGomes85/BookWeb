@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Cadastrar/Editar Livro</title>
+</head>
+
+<ui:composition template="/templates/_template.xhtml">
+
+	<ui:define name="corpo">
+
+		<h:form id="form">
+
+			<p:growl id="msgs" showDetail="true" />
+
+			<!-- Adiciona o botão no cabeçalho da tabela -->
+			
+			<p:dataTable id="categoriesTable" widgetVar="categoriesTable" var="category"
+			
+				value="#{categoryMB.categories}" editable="true">
+
+				<f:facet name="header">
+					
+					<div class="ui-helper-clearfix">
+						<h3 style="float: left;">Lista de Categorias</h3>
+						
+						<p:commandButton value="Adicionar Categoria" process="@this" update=":form:msgs"
+                                 action="#{categoryMB.onAddNew()}" oncomplete="PF('categoriesTable').addRow();"
+                                 style="float: right;"/>
+					</div>
+					
+				</f:facet>
+
+				<p:ajax event="rowEdit" listener="#{categoryMB.onRowEdit}" update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{categoryMB.onRowCancel}" update=":form:msgs" />
+
+				<p:column headerText="Nome">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{category.name}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{category.name}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column style="width:6rem">
+					<p:rowEditor />
+				</p:column>
+				
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

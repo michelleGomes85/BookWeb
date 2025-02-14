@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 
 public class JPAUtil {
 	
-	private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("virtualLibrary");
+	private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("LibraryVirtual");
 	
 	public EntityManager getEntityManager() {
 		return emf.createEntityManager();

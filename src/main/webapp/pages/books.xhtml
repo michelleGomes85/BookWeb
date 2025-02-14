@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Cadastrar/Editar Livro</title>
+</head>
+
+<ui:composition template="/templates/_template.xhtml">
+
+	<ui:define name="corpo">
+
+		<h:form id="form">
+
+			<p:growl id="msgs" showDetail="true" />
+
+			<!-- Adiciona o botão no cabeçalho da tabela -->
+			<p:dataTable id="booksTable" widgetVar="booksTable" var="book"
+				value="#{bookMB.books}" editable="true">
+
+				<f:facet name="header">
+					<div class="ui-helper-clearfix">
+						<h3 style="float: left;">Lista de Livros</h3>
+						
+						<p:commandButton value="Adicionar Livro" process="@this" update=":form:msgs"
+                                 action="#{bookMB.onAddNew()}" oncomplete="PF('booksTable').addRow();"
+                                 style="float: right;"/>
+					</div>
+				</f:facet>
+
+				<p:ajax event="rowEdit" listener="#{bookMB.onRowEdit}" update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{bookMB.onRowCancel}" update=":form:msgs" />
+
+				<!-- Definição das colunas da tabela -->
+				<p:column headerText="ISBN">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.ISBN}" />
+						</f:facet>
+						<f:facet name="input">
+						    <p:inputMask id="isbn-mask" mask="999-9-99-999999-9" value="#{book.ISBN}"/>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Título">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.title}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{book.title}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Autor">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.author}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{book.author}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Descrição">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.description}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputTextarea value="#{book.description}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Quantidade em Estoque">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.quantityStock}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputNumber value="#{book.quantityStock}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				
+				<p:column headerText="Preço">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.price}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputNumber value="#{book.price}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Disponível">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.available ? 'Sim' : 'Não'}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectBooleanCheckbox value="#{book.available}" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Categoria">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{book.category.name}" />
+						</f:facet>
+						<f:facet name="input">
+						<p:selectOneMenu value="#{bookMB.idCategory}" style="width:100%">
+								<f:selectItems value="#{bookMB.categories}" var="category"
+									itemLabel="#{category.name}" itemValue="#{category.id}" />
+							</p:selectOneMenu>
+							<p:selectOneMenu value="#{book.category}" style="width:100%">
+								<f:selectItems value="#{bookMB.categories}" var="category"
+									itemLabel="#{category.name}" itemValue="#{category.id}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column style="width:6rem">
+					<p:rowEditor />
+				</p:column>
+				
+			</p:dataTable>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

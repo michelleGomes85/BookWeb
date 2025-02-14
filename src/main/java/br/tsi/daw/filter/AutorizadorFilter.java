@@ -1,6 +1,8 @@
 package br.tsi.daw.filter;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -13,32 +15,44 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebFilter("*.xhtml") // Filtra todas as páginas JSF
+@WebFilter("*.xhtml")
 public class AutorizadorFilter extends HttpFilter implements Filter {
 
     private static final long serialVersionUID = 1L;
 
+    // Lista de páginas que precisam de autenticação
+    private static final List<String> paginasProtegidas = Arrays.asList(
+            "/books.xhtml",
+            "/categories.xhtml"
+    );
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-        
-        String loginURL = req.getContextPath() + "/login.xhtml";
+
         String requestURI = req.getRequestURI();
 
-        boolean logado = (session != null && session.getAttribute("userLogin") != null);
-        boolean isLoginPage = requestURI.equals(loginURL);
-        
-        // Redireciona para o login se não estiver autenticado
-        if (!logado && !isLoginPage) {
-            res.sendRedirect(loginURL); 
+        // Verifica se a página acessada está na lista de páginas protegidas
+        boolean isPaginaProtegida = paginasProtegidas.stream().anyMatch(requestURI::endsWith);
+
+        // Se a página não for protegida, permite o acesso
+        if (!isPaginaProtegida) {
+            chain.doFilter(request, response);
             return;
         }
-        
-        // Continua a requisição normalmente	
-        chain.doFilter(request, response); 
+
+        // Verifica se o usuário está logado
+        boolean logado = (session != null && session.getAttribute("userLogin") != null);
+
+        if (!logado) {
+            res.sendRedirect(req.getContextPath() + "/pages/login.xhtml");
+            return;
+        }
+
+        chain.doFilter(request, response);
     }
 }
