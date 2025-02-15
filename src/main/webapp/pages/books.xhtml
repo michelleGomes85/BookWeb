@@ -6,8 +6,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Cadastrar/Editar Livro</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Cadastrar/Editar Livro</title>
 </head>
 
 <ui:composition template="/templates/_template.xhtml">
@@ -25,15 +25,17 @@
 				<f:facet name="header">
 					<div class="ui-helper-clearfix">
 						<h3 style="float: left;">Lista de Livros</h3>
-						
-						<p:commandButton value="Adicionar Livro" process="@this" update=":form:msgs"
-                                 action="#{bookMB.onAddNew()}" oncomplete="PF('booksTable').addRow();"
-                                 style="float: right;"/>
+
+						<p:commandButton value="Adicionar Livro" process="@this"
+							update=":form:msgs" action="#{bookMB.onAddNew()}"
+							oncomplete="PF('booksTable').addRow();" style="float: right;" />
 					</div>
 				</f:facet>
 
-				<p:ajax event="rowEdit" listener="#{bookMB.onRowEdit}" update=":form:msgs" />
-				<p:ajax event="rowEditCancel" listener="#{bookMB.onRowCancel}" update=":form:msgs" />
+				<p:ajax event="rowEdit" listener="#{bookMB.onRowEdit}"
+					update=":form:msgs" />
+				<p:ajax event="rowEditCancel" listener="#{bookMB.onRowCancel}"
+					update=":form:msgs" />
 
 				<!-- Definição das colunas da tabela -->
 				<p:column headerText="ISBN">
@@ -42,7 +44,8 @@
 							<h:outputText value="#{book.ISBN}" />
 						</f:facet>
 						<f:facet name="input">
-						    <p:inputMask id="isbn-mask" mask="999-9-99-999999-9" value="#{book.ISBN}"/>
+							<p:inputMask id="isbn-mask" mask="999-9-99-999999-9"
+								value="#{book.ISBN}" />
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -90,7 +93,7 @@
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
-				
+
 				<p:column headerText="Preço">
 					<p:cellEditor>
 						<f:facet name="output">
@@ -119,11 +122,7 @@
 							<h:outputText value="#{book.category.name}" />
 						</f:facet>
 						<f:facet name="input">
-						<p:selectOneMenu value="#{bookMB.idCategory}" style="width:100%">
-								<f:selectItems value="#{bookMB.categories}" var="category"
-									itemLabel="#{category.name}" itemValue="#{category.id}" />
-							</p:selectOneMenu>
-							<p:selectOneMenu value="#{book.category}" style="width:100%">
+							<p:selectOneMenu value="#{bookMB.idCategory}" style="width:100%">
 								<f:selectItems value="#{bookMB.categories}" var="category"
 									itemLabel="#{category.name}" itemValue="#{category.id}" />
 							</p:selectOneMenu>
@@ -134,7 +133,7 @@
 				<p:column style="width:6rem">
 					<p:rowEditor />
 				</p:column>
-				
+
 			</p:dataTable>
 
 		</h:form>

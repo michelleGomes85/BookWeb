@@ -1,7 +1,5 @@
 package br.tsi.daw.model;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,10 +21,10 @@ public class Book {
 	private String ISBN;
 	private String title;
 	private String description;
-	private String quantityStock;
+	private Integer quantityStock;
 	private Boolean available;
 	private String author;
-	private BigDecimal price;
+	private Double price;
 	
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -64,11 +62,11 @@ public class Book {
 		this.description = description;
 	}
 
-	public String getQuantityStock() {
+	public Integer getQuantityStock() {
 		return quantityStock;
 	}
 
-	public void setQuantityStock(String quantityStock) {
+	public void setQuantityStock(Integer quantityStock) {
 		this.quantityStock = quantityStock;
 	}
 
@@ -96,11 +94,11 @@ public class Book {
 		this.category = category;
 	}
 
-	public BigDecimal getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 }

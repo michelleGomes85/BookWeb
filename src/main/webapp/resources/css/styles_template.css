@@ -109,6 +109,12 @@ body .ui-menu {
 #conteudo {
     padding-top: 150px;
     min-height: 80vh;
+    padding-bottom: 100px;
+    
+    display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	align-items: center;
 }
 
 /* Footer */
@@ -154,15 +160,9 @@ body .ui-menu {
     font-size: 14px;
 }
 
-#conteudo {
-	display: flex;
-	min-height: 100vh;
-	justify-content: center;
-}
-
 .ui-datatable table {
 	width: auto !important;
-	min-width: 900px;
+	min-width: 750px;
 	max-width: 95vw;
 }
 
@@ -180,4 +180,14 @@ body .ui-menu {
 
 body .ui-selectonemenu {
 	width: 200px;
+}
+
+#bookForm {
+	width: 900px;
+	min-width: 900px;
+}
+
+.spinner-library {
+	margin-left: 240px !important;
+	padding-right: 10px !important;
 }

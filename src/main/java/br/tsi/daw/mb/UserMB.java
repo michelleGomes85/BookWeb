@@ -52,9 +52,15 @@ public class UserMB implements Serializable {
             } else {
                 admin = true;
             }
-
+            
             // Armazena o usuário logado na sessão
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogin", userSession);
+            
+            // Verifica se há um redirecionamento armazenado na sessão
+            String redirectTo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("redirectTo");
+            if (redirectTo != null && redirectTo.equals("cart"))
+                return "cart?faces-redirect=true";
+            
             return "library?faces-redirect=true";
         } else {
             user = new User();
@@ -71,7 +77,6 @@ public class UserMB implements Serializable {
     }
 
     public String logout() {
-        // Invalida a sessão
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         userSession = new User();
         user = new User();

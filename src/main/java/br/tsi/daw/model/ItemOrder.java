@@ -19,9 +19,11 @@ public class ItemOrder {
 			sequenceName="itemOrder_seq",
 			allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="itemOrder_id")
+	
 	private Long id;
 	
 	private int amount;
+	private double unitPrice;
 	private double totalPrice;
 	
     @ManyToOne
@@ -70,5 +72,13 @@ public class ItemOrder {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public double getUnitPrice() {
+		return amount * unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 }

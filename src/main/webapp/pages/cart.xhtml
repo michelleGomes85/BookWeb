@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Carrinho de Compras</title>
+</h:head>
+
+<ui:composition template="/templates/_template.xhtml">
+	<ui:define name="corpo">
+
+		<h:form id="cartForm">
+			<p:dataTable id="cartTable" widgetVar="cartTable" var="item" value="#{orderMB.cart}">
+
+				<f:facet name="header">
+					<div class="ui-helper-clearfix">
+						<h3 style="float: left;">🛒 Seu Carrinho</h3>
+					</div>
+				</f:facet>
+
+				<p:column headerText="Livro">
+					<h:outputText value="#{item.book.title}" />
+				</p:column>
+
+				<p:column headerText="Preço">
+					<h:outputText value="#{item.book.price}">
+						<f:convertNumber type="currency" currencySymbol="R$" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Quantidade">
+					<p:spinner value="#{item.amount}" min="1" max="#{item.book.quantityStock}">
+						<p:ajax event="change" listener="#{orderMB.updateQuantity(item)}" update="cartForm" />
+					</p:spinner>
+				</p:column>
+
+				<p:column headerText="Subtotal">
+					<h:outputText value="#{item.totalPrice}">
+						<f:convertNumber type="currency" currencySymbol="R$" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Remover">
+					<p:commandButton icon="pi pi-trash"
+						actionListener="#{orderMB.removeFromCart(item)}" update="cartForm"
+						styleClass="p-button-danger" />
+				</p:column>
+				
+			</p:dataTable>
+
+			<!-- Resumo do Pedido -->
+			<div class="cart-summary">
+
+				<h3>
+					Total:
+					<h:outputText value="#{orderMB.totalCartValue}">
+						<f:convertNumber type="currency" currencySymbol="R$" />
+					</h:outputText>
+				</h3>
+
+				<!-- Botão de Finalizar Compra -->
+				<p:commandButton value="Finalizar Compra" icon="pi pi-check"
+					action="#{orderMB.finalizeOrder}" disabled="#{empty orderMB.cart}"
+					styleClass="p-button-success" />
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
