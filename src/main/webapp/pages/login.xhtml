@@ -8,10 +8,10 @@
 <ui:composition template="/templates/_template.xhtml">
 
 	<ui:define name="corpo">
-	
+
 		<h:form id="login">
 			<h2>Entrar</h2>
-			
+
 			<!-- Div para estilização do campo -->
 			<div class="form-field">
 				<h:outputLabel value="Login" for="login" />
@@ -21,16 +21,25 @@
 			<!-- Div para estilização do campo -->
 			<div class="form-field">
 				<h:outputLabel value="Senha" for="senha" />
-				<p:password id="toggle" value="#{userMB.user.password}" toggleMask="true" redisplay="true"
-			    passThrough="autocomplete" autocomplete="current-password"/>
+				<p:password id="toggle" value="#{userMB.user.password}"
+					toggleMask="true" redisplay="true" passThrough="autocomplete"
+					autocomplete="current-password" />
 			</div>
 
 			<!-- Div para o botão de login -->
 			<div class="form-field">
-				<h:commandButton value="Logar" action="#{userMB.login}" styleClass="ui-button-outlined button-login">
+				<h:commandButton value="Logar" action="#{userMB.login}"
+					styleClass="ui-button-outlined button-login">
 					<f:ajax execute="@form" render=":login" />
 				</h:commandButton>
 			</div>
+
+			<!-- Link para criação de conta -->
+			<div class="form-field" style="text-align: center; margin-top: 10px;">
+				<h:outputText value="Não tem conta? " />
+				<p:commandLink value="Crie sua conta" action="#{userMB.userData}"/>
+			</div>
+			
 		</h:form>
 	</ui:define>
 </ui:composition>

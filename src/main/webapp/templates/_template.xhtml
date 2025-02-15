@@ -26,29 +26,43 @@
 				<p:menuitem value="Sistema E-Livros" url="library.xhtml"
 					icon="pi pi-home" styleClass="menu-left" />
 
-				<!-- Links do meio -->
+				<!-- Links de Categorias e Livros - Apenas para usuários logados com perfil diferente de USER -->
 				<p:menuitem value="Categorias" url="categories.xhtml"
-					icon="pi pi-list" styleClass="menu-center" />
+					icon="pi pi-list" styleClass="menu-center" 
+					rendered="#{not empty userMB.user.login and userMB.user.profile ne 'USER'}" />
+				
 				<p:menuitem value="Livros" url="books.xhtml" icon="pi pi-book"
-					styleClass="menu-center" />
+					styleClass="menu-center" 
+					rendered="#{not empty userMB.user.login and userMB.user.profile ne 'USER'}" />
+					
+				<!-- Link Funcionários - Apenas para usuários com perfil ADMIN -->
+				<p:menuitem value="Funcionários" url="employees.xhtml"
+					icon="pi pi-users" styleClass="menu-center" 
+					rendered="#{not empty userMB.user.login and userMB.user.profile eq 'ADMIN'}" />
 
-				<!-- Usuário não logado -->
-				<p:menuitem value="Fazer Login" action="#{userMB.login}"
-					rendered="#{empty userMB.user.login}" styleClass="menu-right">
+				<!-- Link de Login - Para usuários não logados -->
+				<p:menuitem value="Fazer Login" url="login.xhtml"
+					rendered="#{empty userMB.user.login}" styleClass="menu-right" />
+
+				<!-- Link para Login via comando - Para usuários não logados -->
+				<p:menuitem value="Fazer Login" action="#{userMB.login}" rendered="#{empty userMB.user.login}" styleClass="menu-right">
 					<div class="icon">
 						<h:graphicImage name="user-login.png" library="images" />
 					</div>
 				</p:menuitem>
 
-				<p:menuitem value="#{userMB.user.login}"
-					rendered="#{not empty userMB.user.login}" styleClass="menu-right">
+				<!-- Link de Visualização de Dados - Apenas para usuários logados -->
+				<p:menuitem value="Visualizar Dados" action="#{userMB.userData}"
+					rendered="#{not empty userMB.user.login}" styleClass="menu-right" />
+
+				<!-- Nome do Usuário Logado - Apenas para usuários logados -->
+				<p:menuitem value="#{userMB.user.login}" rendered="#{not empty userMB.user.login}" styleClass="menu-right" action="#{userMB.userData}">
 					<div class="icon">
 						<h:graphicImage name="logged-in-user.png" library="images" />
 					</div>
 				</p:menuitem>
 
-				<p:menuitem value="Visualizar Dados" action="#{userMB.viewProfile}"
-					rendered="#{not empty userMB.user.login}" styleClass="menu-right" />
+				<!-- Link de Logout - Apenas para usuários logados -->
 				<p:menuitem value="Sair" action="#{userMB.logout}"
 					rendered="#{not empty userMB.user.login}" styleClass="menu-right" />
 			</p:menubar>
@@ -68,8 +82,7 @@
 				</p>
 				<p>Email: gmichele498@gmail.com</p>
 				<p class="icons-contact">
-					<a href="https://www.linkedin.com/in/michelleGomes85/"
-						target="_blank"> <i class="fab fa-linkedin"></i>
+					<a href="https://www.linkedin.com/in/michelleGomes85/" target="_blank"> <i class="fab fa-linkedin"></i>
 					</a> | <a href="https://github.com/michelleGomes85" target="_blank">
 						<i class="fab fa-github"></i>
 					</a>

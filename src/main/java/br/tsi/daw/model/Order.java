@@ -3,6 +3,7 @@ package br.tsi.daw.model;
 import java.util.Date;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,7 +33,7 @@ public class Order {
     @JoinColumn(name = "client_id")
 	private Client client;
     
-    @OneToMany(mappedBy = "order")
+    @OneToMany(cascade=CascadeType.PERSIST, mappedBy="order")
     private List<ItemOrder> itensOrder;
 
 	public Long getId() {

@@ -26,32 +26,37 @@ public class UserMB implements Serializable {
         this.user.setClient(new Client());
     }
 
-    public void addUser() {
+    public String addUser() {
+    	
         DAO<User> userDao = new DAO<>(User.class);
 
         if (user.getId() == null) {
             user.setProfile((admin) ? Profile.FUNC : Profile.USER);
             userDao.add(user);
-        } else {
+        } else
             userDao.update(user);
-        }
+        
+        return redirectToLibrary();
+    }
+    
+    private String redirectToLibrary() {
+    	return "library?faces-redirect=true";
     }
 
     public String login() {
+    	
     	UserDAO userDAO = new UserDAO();
         User loggedUser = userDAO.findByLoginAndPassword(user);
 
         if (loggedUser != null) {
+        	
             userSession = loggedUser;
-            if (loggedUser.getProfile() != Profile.ADMIN) {
-                user = loggedUser;
-                if (user.getClient() == null) {
-                    user.setClient(new Client());
-                }
-                admin = false;
-            } else {
-                admin = true;
-            }
+            user = loggedUser;
+            
+            if (user.getClient() == null)
+                user.setClient(new Client());
+            
+            admin = (loggedUser.getProfile() != Profile.ADMIN) ? false : true; 
             
             // Armazena o usuário logado na sessão
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogin", userSession);
@@ -61,7 +66,7 @@ public class UserMB implements Serializable {
             if (redirectTo != null && redirectTo.equals("cart"))
                 return "cart?faces-redirect=true";
             
-            return "library?faces-redirect=true";
+            return redirectToLibrary();
         } else {
             user = new User();
             return "login?faces-redirect=true";
@@ -84,7 +89,7 @@ public class UserMB implements Serializable {
     }
 
     public String cancelEdit() {
-        return "library?faces-redirect=true";
+    	return redirectToLibrary();
     }
 
     public User getUser() {
@@ -102,4 +107,8 @@ public class UserMB implements Serializable {
     public void setUserSession(User userSession) {
         this.userSession = userSession;
     }
+    
+	public String userData() {
+		return "register_user?faces-redirect=true";
+	}
 }

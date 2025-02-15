@@ -20,14 +20,9 @@
             <h:form id="register-user">
             
             	<h2>
-					<h:outputText value="Cadastrar Funcionário"
-						rendered="#{userMB.admin}" />
+					<h:outputText value="Registro" rendered="#{empty userMB.user.id}" />
 	
-					<h:outputText value="Registro"
-						rendered="#{not userMB.admin and empty userMB.user.id}" />
-	
-					<h:outputText value="Editar Dados"
-						rendered="#{not userMB.admin and not empty userMB.user.id}" />
+					<h:outputText value="Editar Dados" rendered="#{not empty userMB.user.id}" />
 				</h2>
 
                 <p:messages styleClass="erros"/>
@@ -42,7 +37,7 @@
                     <p:inputMask id="cpf" value="#{userMB.user.client.cpf}" mask="999.999.999-99" required="true" requiredMessage="O CPF é obrigatório." />
 					
                     <h:outputLabel value="E-mail" for="email"/>
-                    <p:inputText id="email" value="#{userMB.user.client.email}" disabled="#{not empty userMB.user.id and not userMB.admin}" required="true" requiredMessage="O e-mail é obrigatório." />
+                    <p:inputText id="email" value="#{userMB.user.client.email}" disabled="#{not empty userMB.user.id}" required="true" requiredMessage="O e-mail é obrigatório." />
 
                     <h:outputLabel value="Celular" for="celular"/>
                     <p:inputMask id="celular" value="#{userMB.user.client.phoneNumber}" mask="(99) 99999-9999" required="true" requiredMessage="O celular é obrigatório." />
@@ -51,19 +46,21 @@
 
                 <!-- Dados do Funcionário -->
                 <p:fieldset legend="Dados de Acesso">
+                
                     <h:outputLabel value="Login" for="login"/>
                     <p:inputText id="login" value="#{userMB.user.login}" required="true" requiredMessage="O login é obrigatório." />
 
                     <h:outputLabel value="Senha" for="senha"/>
                     <p:password id="senha" value="#{userMB.user.password}" required="true" requiredMessage="A senha é obrigatória." />
+                    
                 </p:fieldset>
 
                 <!-- Botões dinâmicos -->
-                <p:commandButton value="Cadastrar" action="#{userMB.addUser}" update="register-user" rendered="#{empty userMB.user.id or userMB.admin}"/>
+                <p:commandButton value="Cadastrar" action="#{userMB.addUser}" update="register-user" rendered="#{empty userMB.user.id}" styleClass="button-user"/>
                 
                 <!-- Botões de Editar e Cancelar -->
-                <p:commandButton value="Editar" action="#{userMB.addUser}" update="register-user" rendered="#{not userMB.admin and not empty userMB.user.id}"/>
-                <p:commandButton value="Cancelar" action="#{userMB.cancelEdit}" update="register-user" rendered="#{not userMB.admin and not empty userMB.user.id}" immediate="true"/>
+                <p:commandButton value="Editar" action="#{userMB.addUser}" update="register-user" rendered="#{not empty userMB.user.id}" styleClass="button-user"/>
+                <p:commandButton value="Cancelar" action="#{userMB.cancelEdit}" update="register-user" rendered="#{not empty userMB.user.id}" immediate="true" styleClass="button-user cancel-button"/>
             </h:form>
         </ui:define>
     </ui:composition>

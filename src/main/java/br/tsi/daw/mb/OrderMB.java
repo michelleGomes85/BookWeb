@@ -2,6 +2,7 @@ package br.tsi.daw.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.tsi.daw.dao.DAO;
@@ -74,9 +75,8 @@ public class OrderMB implements Serializable {
         DAO<Book> dao = new DAO<>(Book.class);
         Book book = dao.searchById(bookId);
         
-        if (book == null || spinnerValue < 1) {
+        if (book == null || spinnerValue < 1)
             return;
-        }
 
         ItemOrder item = new ItemOrder();
         item.setBook(book);
@@ -117,6 +117,7 @@ public class OrderMB implements Serializable {
         order.setItensOrder(cart);
         order.setClient(userMB.getUserSession().getClient());
         order.setTotalPrice(getTotalCartValue());
+        order.setDateOrder(new Date());
 
         DAO<Order> dao = new DAO<>(Order.class);
         dao.add(order);
