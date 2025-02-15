@@ -23,40 +23,36 @@
 			<p:menubar styleClass="custom-menubar">
 
 				<!-- Logo -->
-				<p:menuitem value="Sistema E-Livros" url="library.xhtml"
+				<p:menuitem value="Sistema E-Livros" action="#{navigationMB.toLibrary}"
 					icon="pi pi-home" styleClass="menu-left" />
 
-				<!-- Links de Categorias e Livros - Apenas para usuários logados com perfil diferente de USER -->
-				<p:menuitem value="Categorias" url="categories.xhtml"
+				<p:menuitem value="Categorias" action="#{navigationMB.toCategories}"
 					icon="pi pi-list" styleClass="menu-center" 
 					rendered="#{not empty userMB.user.login and userMB.user.profile ne 'USER'}" />
 				
-				<p:menuitem value="Livros" url="books.xhtml" icon="pi pi-book"
+				<p:menuitem value="Livros" action="#{navigationMB.toBooks}" icon="pi pi-book"
 					styleClass="menu-center" 
 					rendered="#{not empty userMB.user.login and userMB.user.profile ne 'USER'}" />
 					
-				<!-- Link Funcionários - Apenas para usuários com perfil ADMIN -->
-				<p:menuitem value="Funcionários" url="employees.xhtml"
+				<p:menuitem value="Funcionários" action="#{navigationMB.toEmployee}"
 					icon="pi pi-users" styleClass="menu-center" 
 					rendered="#{not empty userMB.user.login and userMB.user.profile eq 'ADMIN'}" />
 
-				<!-- Link de Login - Para usuários não logados -->
-				<p:menuitem value="Fazer Login" url="login.xhtml"
+				<p:menuitem value="Fazer Login" action="#{navigationMB.toLogin}"
 					rendered="#{empty userMB.user.login}" styleClass="menu-right" />
 
-				<!-- Link para Login via comando - Para usuários não logados -->
-				<p:menuitem value="Fazer Login" action="#{userMB.login}" rendered="#{empty userMB.user.login}" styleClass="menu-right">
+				<p:menuitem value="Fazer Login" action="#{navigationMB.toLogin}" rendered="#{empty userMB.user.login}" styleClass="menu-right">
 					<div class="icon">
 						<h:graphicImage name="user-login.png" library="images" />
 					</div>
 				</p:menuitem>
 
 				<!-- Link de Visualização de Dados - Apenas para usuários logados -->
-				<p:menuitem value="Visualizar Dados" action="#{userMB.userData}"
+				<p:menuitem value="Visualizar Dados" action="#{navigationMB.toUserRegistration}"
 					rendered="#{not empty userMB.user.login}" styleClass="menu-right" />
 
 				<!-- Nome do Usuário Logado - Apenas para usuários logados -->
-				<p:menuitem value="#{userMB.user.login}" rendered="#{not empty userMB.user.login}" styleClass="menu-right" action="#{userMB.userData}">
+				<p:menuitem value="#{userMB.user.login}" rendered="#{not empty userMB.user.login}" styleClass="menu-right" action="#{navigationMB.toUserRegistration}">
 					<div class="icon">
 						<h:graphicImage name="logged-in-user.png" library="images" />
 					</div>

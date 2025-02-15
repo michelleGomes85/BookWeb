@@ -8,7 +8,7 @@
 	<display-name>LibraryVirtual</display-name>
 
 	<welcome-file-list>
-		<welcome-file>library.html</welcome-file>
+		<welcome-file>pages/library.xhtml</welcome-file>
 		<welcome-file>index.xhtml</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

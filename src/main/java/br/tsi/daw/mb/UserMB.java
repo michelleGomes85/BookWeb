@@ -1,14 +1,18 @@
 package br.tsi.daw.mb;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import br.tsi.daw.dao.DAO;
 import br.tsi.daw.dao.UserDAO;
 import br.tsi.daw.enuns.Profile;
 import br.tsi.daw.model.Client;
 import br.tsi.daw.model.User;
+import br.tsi.daw.utils.EmailTemplateUtils;
+import br.tsi.daw.utils.SendEmailUtils;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @SessionScoped
@@ -20,6 +24,9 @@ public class UserMB implements Serializable {
     private User user;
     private User userSession;
     private boolean admin;
+    
+    @Inject
+    private NavigationMB navigationMB;
 
     public UserMB() {
         this.user = new User();
@@ -31,16 +38,29 @@ public class UserMB implements Serializable {
         DAO<User> userDao = new DAO<>(User.class);
 
         if (user.getId() == null) {
+        	
+            String token = UUID.randomUUID().toString();
+            user.setConfirmationToken(token);
+
             user.setProfile((admin) ? Profile.FUNC : Profile.USER);
             userDao.add(user);
+
+            String confirmLink = "http://localhost:8080/LibraryVirtual/pages/confirm.xhtml?token=" + token;
+            
+            StringBuilder emailContent = EmailTemplateUtils.getConfirmationEmail(user.getLogin(), user.getProfile().getDescription(), confirmLink);
+            
+            SendEmailUtils.sendEmail(user.getClient().getEmail(), "Confirmação de Cadastro", emailContent);
+            
+            this.user = new User();
+            this.user.setClient(new Client());
         } else
             userDao.update(user);
-        
-        return redirectToLibrary();
+
+        return "login?faces-redirect=true";
     }
     
     private String redirectToLibrary() {
-    	return "library?faces-redirect=true";
+    	return navigationMB.toLibrary();
     }
 
     public String login() {
@@ -48,7 +68,7 @@ public class UserMB implements Serializable {
     	UserDAO userDAO = new UserDAO();
         User loggedUser = userDAO.findByLoginAndPassword(user);
 
-        if (loggedUser != null) {
+        if (loggedUser != null && loggedUser.isActivate()) {
         	
             userSession = loggedUser;
             user = loggedUser;
@@ -58,18 +78,16 @@ public class UserMB implements Serializable {
             
             admin = (loggedUser.getProfile() != Profile.ADMIN) ? false : true; 
             
-            // Armazena o usuário logado na sessão
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userLogin", userSession);
             
-            // Verifica se há um redirecionamento armazenado na sessão
             String redirectTo = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("redirectTo");
             if (redirectTo != null && redirectTo.equals("cart"))
-                return "cart?faces-redirect=true";
+                return navigationMB.toCart();
             
             return redirectToLibrary();
         } else {
             user = new User();
-            return "login?faces-redirect=true";
+            return navigationMB.toLogin();
         }
     }
 
@@ -82,10 +100,12 @@ public class UserMB implements Serializable {
     }
 
     public String logout() {
+    	
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         userSession = new User();
         user = new User();
-        return "login?faces-redirect=true";
+        
+        return navigationMB.toLogin();
     }
 
     public String cancelEdit() {
@@ -109,6 +129,6 @@ public class UserMB implements Serializable {
     }
     
 	public String userData() {
-		return "register_user?faces-redirect=true";
+		return navigationMB.toUserRegistration();
 	}
 }

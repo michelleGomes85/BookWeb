@@ -25,6 +25,10 @@ public class User {
 	private String login;
 	private String password;
 	
+	private String confirmationToken;
+	
+	private boolean activate;
+	
 	@Enumerated(EnumType.STRING)
 	private Profile profile;
 	
@@ -69,5 +73,21 @@ public class User {
 	
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	public String getConfirmationToken() {
+		return confirmationToken;
+	}
+	
+	public void setConfirmationToken(String confirmationToken) {
+		this.confirmationToken = confirmationToken;
+	}
+	
+	public boolean isActivate() {
+		return activate;
+	}
+	
+	public void setActivate(boolean activate) {
+		this.activate = activate;
 	}	
 }

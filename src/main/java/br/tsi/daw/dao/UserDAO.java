@@ -30,4 +30,22 @@ public class UserDAO {
 			em.close();
 		}
 	}
+	
+    public User findByField(String fieldName, String fieldValue) {
+        EntityManager em = new JPAUtil().getEntityManager();
+
+        try {
+            String jpql = "SELECT u FROM User u WHERE u." + fieldName + " = :fieldValue";
+            Query query = em.createQuery(jpql, User.class);
+            query.setParameter("fieldValue", fieldValue);
+
+            @SuppressWarnings("unchecked")
+            List<User> users = query.getResultList();
+
+            return users.isEmpty() ? null : users.get(0);
+
+        } finally {
+            em.close();
+        }
+    }
 }
