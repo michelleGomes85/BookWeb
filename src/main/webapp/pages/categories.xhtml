@@ -5,59 +5,162 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-	
+
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Cadastrar/Editar Livro</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Cadastrar/Editar Categoria</title>
 </head>
 
 <ui:composition template="/templates/_template.xhtml">
 
 	<ui:define name="corpo">
 
-		<h:form id="form">
-
-			<p:growl id="msgs" showDetail="true" />
-
-			<!-- Adiciona o botão no cabeçalho da tabela -->
+		<div class="card crud-demo">
+		
+			<h:form id="form">
 			
-			<p:dataTable id="categoriesTable" widgetVar="categoriesTable" var="category"
-			
-				value="#{categoryMB.categories}" editable="true">
+				<p:growl id="messages" showDetail="true" />
 
-				<f:facet name="header">
-					
-					<div class="ui-helper-clearfix">
-						<h3 style="float: left;">Lista de Categorias</h3>
-						
-						<p:commandButton value="Adicionar Categoria" process="@this" update=":form:msgs"
-                                 action="#{categoryMB.onAddNew()}" oncomplete="PF('categoriesTable').addRow();"
-                                 style="float: right;"/>
-					</div>
-					
-				</f:facet>
-
-				<p:ajax event="rowEdit" listener="#{categoryMB.onRowEdit}" update=":form:msgs" />
-				<p:ajax event="rowEditCancel" listener="#{categoryMB.onRowCancel}" update=":form:msgs" />
-
-				<p:column headerText="Nome">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{category.name}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText value="#{category.name}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column style="width:6rem">
-					<p:rowEditor />
-				</p:column>
+				<p:toolbar>
 				
-			</p:dataTable>
+					<p:toolbarGroup>
+					
+						<p:commandButton value="Nova Categoria" icon="pi pi-plus"
+							actionListener="#{crudCategory.openNew}"
+							update=":dialogs:manage-category-content"
+							oncomplete="PF('manageCategoryDialog').show()"
+							styleClass="ui-button-success" style="margin-right: .5rem">
+							<p:resetInput target=":dialogs:manage-category-content" />
+						</p:commandButton>
+						
+						<p:commandButton id="delete-categories-button"
+							value="#{crudCategory.deleteButtonMessage}" icon="pi pi-trash"
+							actionListener="#{crudCategory.deleteSelectedCategories}"
+							styleClass="ui-button-danger"
+							disabled="#{!crudCategory.hasSelectedCategories()}"
+							update="@this">
+							
+							<p:confirm header="Confirmação"
+								message="Excluir as categorias selecionadas?"
+								icon="pi pi-exclamation-triangle" />
+								
+						</p:commandButton>
+						
+					</p:toolbarGroup>
+				</p:toolbar>
 
-		</h:form>
+				<p:dataTable id="dt-categories" widgetVar="dtCategories"
+					var="category" value="#{crudCategory.categories}"
+					reflow="true" styleClass="categories-table"
+					selection="#{crudCategory.selectedCategories}"
+					rowKey="#{category.id}" paginator="true" rows="10"
+					selectionRowMode="add" paginatorPosition="bottom">
+					
+					<f:facet name="header">
+						<div class="categories-table-header">
+							<span class="title_table">CATEGORIAS</span> <span
+								class="filter-container ui-input-icon-left"> <i
+								class="pi pi-search"></i> <p:inputText id="globalFilter"
+									onkeyup="PF('dtCategories').filter()" placeholder="Pesquisar" />
+							</span>
+						</div>
+					</f:facet>
+
+					<p:ajax event="rowSelect" update=":form:delete-categories-button" />
+					
+					<p:ajax event="rowUnselect"
+						update=":form:delete-categories-button" />
+						
+					<p:ajax event="rowSelectCheckbox"
+						update=":form:delete-categories-button" />
+						
+					<p:ajax event="rowUnselectCheckbox"
+						update=":form:delete-categories-button" />
+						
+					<p:ajax event="toggleSelect"
+						update=":form:delete-categories-button" />
+
+					<p:column selectionMode="multiple" exportable="false"></p:column>
+
+					<p:column headerText="Nome" sortBy="#{category.name}"
+						filterBy="#{category.name}">
+						<h:outputText value="#{category.name}" />
+					</p:column>
+					
+					<p:column exportable="false" ariaHeaderText="Ações">
+					
+						<p:commandButton icon="pi pi-pencil"
+							update=":dialogs:manage-category-content"
+							oncomplete="PF('manageCategoryDialog').show()"
+							styleClass="edit-button rounded-button ui-button-success"
+							process="@this">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{crudCategory.selectedCategory}" />
+							<p:resetInput target=":dialogs:manage-category-content" />
+						</p:commandButton>
+						
+						<p:commandButton class="ui-button-warning rounded-button"
+							icon="pi pi-trash" process="@this"
+							oncomplete="PF('deleteCategoryDialog').show()">
+							<f:setPropertyActionListener value="#{category}"
+								target="#{crudCategory.selectedCategory}" />
+						</p:commandButton>
+						
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+			<h:form id="dialogs">
+				<p:dialog header="Detalhes da Categoria" showEffect="fade"
+					modal="true" widgetVar="manageCategoryDialog" responsive="true">
+					<p:outputPanel id="manage-category-content" class="ui-fluid">
+						<p:outputPanel
+							rendered="#{not empty crudCategory.selectedCategory}">
+							<div class="field">
+								<p:outputLabel for="nome">Nome</p:outputLabel>
+								<p:inputText id="nome"
+									value="#{crudCategory.selectedCategory.name}"
+									required="true" />
+							</div>
+						</p:outputPanel>
+					</p:outputPanel>
+
+					<f:facet name="footer">
+						<p:commandButton value="Salvar" icon="pi pi-check"
+							actionListener="#{crudCategory.saveCategory}"
+							update="manage-category-content"
+							process="manage-category-content @this" />
+						<p:commandButton value="Cancelar" icon="pi pi-times"
+							onclick="PF('manageCategoryDialog').hide()"
+							class="ui-button-secondary" type="button" />
+					</f:facet>
+				</p:dialog>
+
+				<p:confirmDialog widgetVar="deleteCategoryDialog"
+					showEffect="fade" width="300" message="Excluir a categoria?"
+					header="Confirmar" severity="warn">
+					<p:commandButton value="Sim" icon="pi pi-check"
+						actionListener="#{crudCategory.deleteCategory}"
+						process="@this" update=":form:delete-categories-button"
+						oncomplete="PF('deleteCategoryDialog').hide()" />
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-button-secondary" icon="pi pi-times"
+						onclick="PF('deleteCategoryDialog').hide()" />
+						
+				</p:confirmDialog>
+
+				<p:confirmDialog global="true" showEffect="fade" width="300">
+					
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+						
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no ui-button-secondary"
+						icon="pi pi-times" />
+						
+				</p:confirmDialog>
+			</h:form>
+		</div>
 
 	</ui:define>
 </ui:composition>

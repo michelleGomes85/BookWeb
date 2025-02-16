@@ -83,22 +83,6 @@
 	flex-direction: column;
 }
 
-.ui-button-text-icon-left .ui-button-text {
-	padding: 10px 20px 10px 50px !important;
-}
-
-.ui-widget .ui-icon.pi, .ui-icon.pi {
-	font-size: 14px !important;
-}
-
-.ui-spinner {
-	float: right;
-}
-
-.total-price {
-	text-align: right;
-}
-
 #cartForm {
 	min-width: 900px;
 	width: 900px;
@@ -118,16 +102,7 @@
 	margin-bottom: 20px;
 }
 
-.ui-datatable table {
-	width: 100% !important;
-	text-align: center;
-}
-
-.button-add-cart {
-	width: 300px;
-	margin-left: 200px !important;
-}
-
-.button-add-cart .ui-button-icon-left {
-	margin-left: 20px;
+.title_table {
+	font-weight: bold;
+	margin-right: 100px;
 }

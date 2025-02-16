@@ -5,6 +5,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Cadastrar/Editar Livro</title>
@@ -14,129 +15,221 @@
 
 	<ui:define name="corpo">
 
-		<h:form id="form">
+		<div class="card crud-demo">
+		
+			<h:form id="form">
+			
+				<p:growl id="messages" showDetail="true" />
 
-			<p:growl id="msgs" showDetail="true" />
+				<p:toolbar>
+				
+					<p:toolbarGroup>
+					
+						<p:commandButton value="Novo Livro" icon="pi pi-plus"
+							actionListener="#{crudBook.openNew}"
+							update=":dialogs:manage-book-content"
+							oncomplete="PF('manageBookDialog').show()"
+							styleClass="ui-button-success" style="margin-right: .5rem">
+							<p:resetInput target=":dialogs:manage-book-content" />
+						</p:commandButton>
+						
+						<p:commandButton id="delete-books-button"
+							value="#{crudBook.deleteButtonMessage}" icon="pi pi-trash"
+							actionListener="#{crudBook.deleteSelectedBooks}"
+							styleClass="ui-button-danger"
+							disabled="#{!crudBook.hasSelectedBooks()}"
+							update="@this">
+							<p:confirm header="Confirmação"
+								message="Excluir os livros selecionados?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+						
+					</p:toolbarGroup>
+				</p:toolbar>
 
-			<!-- Adiciona o botão no cabeçalho da tabela -->
-			<p:dataTable id="booksTable" widgetVar="booksTable" var="book"
-				value="#{bookMB.books}" editable="true">
+				<p:dataTable id="dt-books" widgetVar="dtbooks"
+					var="book" value="#{crudBook.books}"
+					reflow="true" styleClass="books-table"
+					selection="#{crudBook.selectedBooks}"
+					rowKey="#{book.id}" paginator="true" rows="10"
+					selectionRowMode="add" paginatorPosition="bottom">
+					
+					<f:facet name="header">
+						<div class="books-table-header">
+							<span class="title_table">LIVROS</span> <span
+								class="filter-container ui-input-icon-left"> <i
+								class="pi pi-search"></i> <p:inputText id="globalFilter"
+									onkeyup="PF('dtbooks').filter()" placeholder="Pesquisar" />
+							</span>
+						</div>
+					</f:facet>
 
-				<f:facet name="header">
-					<div class="ui-helper-clearfix">
-						<h3 style="float: left;">Lista de Livros</h3>
+					<p:ajax event="rowSelect" update=":form:delete-books-button" />
+					
+					<p:ajax event="rowUnselect"	update=":form:delete-books-button" />
+						
+					<p:ajax event="rowSelectCheckbox" update=":form:delete-books-button" />
+						
+					<p:ajax event="rowUnselectCheckbox"	update=":form:delete-books-button" />
+						
+					<p:ajax event="toggleSelect" update=":form:delete-books-button" />
 
-						<p:commandButton value="Adicionar Livro" process="@this"
-							update=":form:msgs" action="#{bookMB.onAddNew()}"
-							oncomplete="PF('booksTable').addRow();" style="float: right;" />
-					</div>
-				</f:facet>
+					<p:column selectionMode="multiple" exportable="false"></p:column>
 
-				<p:ajax event="rowEdit" listener="#{bookMB.onRowEdit}"
-					update=":form:msgs" />
-				<p:ajax event="rowEditCancel" listener="#{bookMB.onRowCancel}"
-					update=":form:msgs" />
+					<p:column headerText="ISBN" sortBy="#{book.ISBN}" filterBy="#{book.ISBN}">
+						<h:outputText value="#{book.ISBN}" />
+					</p:column>
+					
+					<p:column headerText="Título" sortBy="#{book.title}" filterBy="#{book.title}">
+						<h:outputText value="#{book.title}" />
+					</p:column>
+					
+					<p:column headerText="Autor" sortBy="#{book.author}" filterBy="#{book.author}">
+						<h:outputText value="#{book.author}" />
+					</p:column>
+					
+					<p:column headerText="Descrição" sortBy="#{book.description}" filterBy="#{book.description}">
+						<h:outputText value="#{book.description}" />
+					</p:column>
+					
+					<p:column headerText="Acervo Estoque" sortBy="#{book.quantityStock}"	filterBy="#{book.quantityStock}">
+						<h:outputText value="#{book.quantityStock}" />
+					</p:column>
+					
+					<p:column headerText="Preço" sortBy="#{book.price}"	filterBy="#{book.price}">
+						<h:outputText value="#{book.price}" />
+					</p:column>
+					
+					<p:column headerText="Disponível" sortBy="#{book.available}"						filterBy="#{book.available}">
+						<h:outputText value="#{book.available ? 'Sim' : 'Não'}" />
+					</p:column>
+					
+					<p:column headerText="Categoria" sortBy="#{book.category.name}"						filterBy="#{book.category.name}">
+						<h:outputText value="#{book.category.name}" />
+					</p:column>
+					
+					<p:column exportable="false" ariaHeaderText="Ações">
+					
+						<p:commandButton icon="pi pi-pencil"
+							update=":dialogs:manage-book-content"
+							oncomplete="PF('manageBookDialog').show()"
+							styleClass="edit-button rounded-button ui-button-success"
+							process="@this">
+							<f:setPropertyActionListener value="#{book}"
+								target="#{crudBook.selectedBook}" />
+							<p:resetInput target=":dialogs:manage-book-content" />
+						</p:commandButton>
+						
+						<p:commandButton class="ui-button-warning rounded-button"
+							icon="pi pi-trash" process="@this"
+							oncomplete="PF('deleteBookDialog').show()">
+							<f:setPropertyActionListener value="#{book}"
+								target="#{crudBook.selectedBook}" />
+						</p:commandButton>
+						
+					</p:column>
+				</p:dataTable>
+			</h:form>
 
-				<!-- Definição das colunas da tabela -->
-				<p:column headerText="ISBN">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.ISBN}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputMask id="isbn-mask" mask="999-9-99-999999-9"
-								value="#{book.ISBN}" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
+			<h:form id="dialogs">
+				<p:dialog header="Detalhes do Livro" showEffect="fade"
+					modal="true" widgetVar="manageBookDialog" responsive="true">
+					
+					<p:outputPanel id="manage-book-content" class="ui-fluid">
+					
+						<p:outputPanel rendered="#{not empty crudBook.selectedBook}">
+						
+							<div class="field">
+								<p:outputLabel for="isbn">ISBN</p:outputLabel>
+								<p:inputMask id="isbn" value="#{crudBook.selectedBook.ISBN}"
+									mask="999-9-99-999999-9" required="true" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="title">Título</p:outputLabel>
+								<p:inputText id="title" value="#{crudBook.selectedBook.title}"
+									required="true" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="author">Autor</p:outputLabel>
+								<p:inputText id="author" value="#{crudBook.selectedBook.author}"
+									required="true" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="description">Descrição</p:outputLabel>
+								<p:inputTextarea id="description" value="#{crudBook.selectedBook.description}"
+									required="true" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="quantityStock">Acervo Estoque</p:outputLabel>
+								<p:inputNumber id="quantityStock" value="#{crudBook.selectedBook.quantityStock}"
+									required="true" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="price">Preço</p:outputLabel>
+								<p:inputNumber id="price" value="#{crudBook.selectedBook.price}"
+									required="true" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="available">Disponível</p:outputLabel>
+								<p:selectBooleanCheckbox id="available" value="#{crudBook.selectedBook.available}" />
+							</div>
+							
+							<div class="field">
+								<p:outputLabel for="category">Categoria</p:outputLabel>
+								<p:selectOneMenu id="category" value="#{crudBook.selectedBook.category.id}" style="width:100%">
+									<f:selectItems value="#{crudBook.categories}" var="category"
+										itemLabel="#{category.name}" itemValue="#{category.id}" />
+								</p:selectOneMenu>
+							</div>
+							
+						</p:outputPanel>
+					</p:outputPanel>
 
-				<p:column headerText="Título">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.title}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText value="#{book.title}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
+					<f:facet name="footer">
+						<p:commandButton value="Salvar" icon="pi pi-check"
+							actionListener="#{crudBook.saveBook}"
+							update="manage-book-content"
+							process="manage-book-content @this" />
+							
+						<p:commandButton value="Cancelar" icon="pi pi-times"
+							onclick="PF('manageBookDialog').hide()"
+							class="ui-button-secondary" type="button" />
+					</f:facet>
+				</p:dialog>
 
-				<p:column headerText="Autor">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.author}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText value="#{book.author}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
+				<p:confirmDialog widgetVar="deleteBookDialog"
+					showEffect="fade" width="300" message="Excluir o livro?"
+					header="Confirmar" severity="warn">
+					
+					<p:commandButton value="Sim" icon="pi pi-check"
+						actionListener="#{crudBook.deleteBook}"
+						process="@this" update=":form:delete-books-button"
+						oncomplete="PF('deleteBookDialog').hide()" />
+						
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-button-secondary" icon="pi pi-times"
+						onclick="PF('deleteBookDialog').hide()" />
+						
+				</p:confirmDialog>
 
-				<p:column headerText="Descrição">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.description}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputTextarea value="#{book.description}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="Quantidade em Estoque">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.quantityStock}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputNumber value="#{book.quantityStock}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="Preço">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.price}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputNumber value="#{book.price}" style="width:100%" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="Disponível">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.available ? 'Sim' : 'Não'}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:selectBooleanCheckbox value="#{book.available}" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="Categoria">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{book.category.name}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:selectOneMenu value="#{bookMB.idCategory}" style="width:100%">
-								<f:selectItems value="#{bookMB.categories}" var="category"
-									itemLabel="#{category.name}" itemValue="#{category.id}" />
-							</p:selectOneMenu>
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column style="width:6rem">
-					<p:rowEditor />
-				</p:column>
-
-			</p:dataTable>
-
-		</h:form>
+				<p:confirmDialog global="true" showEffect="fade" width="300">
+					
+					<p:commandButton value="Sim" type="button"
+						styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+						
+					<p:commandButton value="Não" type="button"
+						styleClass="ui-confirmdialog-no ui-button-secondary"
+						icon="pi pi-times" />
+						
+				</p:confirmDialog>
+			</h:form>
+		</div>
 
 	</ui:define>
 </ui:composition>

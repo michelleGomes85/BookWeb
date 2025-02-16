@@ -55,7 +55,7 @@
 				</div>
 
 				<p:dataScroller id="bookList" value="#{bookMB.filteredBooks}"
-					var="book" chunkSize="10" mode="inline" scrollHeight="500">
+					var="book" chunkSize="10">
 
 					<f:facet name="header">
                         Role para baixo para carregar mais livros
@@ -76,19 +76,24 @@
 									<f:convertNumber currencySymbol="R$" type="currency" />
 								</h:outputText>
 							</div>
-							<div
-								class="book-status #{book.available ? 'available' : 'unavailable'}">
-								#{book.available ? 'Disponível' : 'Indisponível'}</div>
+							
+							<div class="book-status" rendered="#{book.quantityStock == 0}">
+								Sem estoque
+							</div>
 						</div>
 
 						<!-- Botão de ação e Spinner -->
 						<div class="book-actions">
-							<p:spinner id="rotate" value="#{orderMB.spinnerValue}" min="1"
-								max="#{book.quantityStock}" rotate="true"
-								disabled="#{!book.available}" styleClass="spinner-library"/>
+
+							<p:spinner id="rotate" value="#{orderMB.spinnerValues[book.id]}"
+								min="1" max="#{book.quantityStock}" rotate="true"
+								disabled="#{book.quantityStock == 0}">
+								<p:ajax event="change"
+									listener="#{orderMB.setSpinnerValues(book.id, orderMB.spinnerValues[book.id])}" />
+							</p:spinner>
 
 							<p:commandButton value="Adicionar ao Carrinho"
-								icon="pi pi-shopping-cart" disabled="#{!book.available}"
+								icon="pi pi-shopping-cart" disabled="#{book.quantityStock == 0}"
 								actionListener="#{orderMB.addToCart(book.id)}"
 								update="cartForm bookForm:bookList"
 								styleClass="p-button-success button-add-cart" />

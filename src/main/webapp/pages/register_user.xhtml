@@ -1,67 +1,138 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>
-            <h:outputText value="Dados Usuário"/>
-        </title>
-    </head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title><h:outputText value="Dados Usuário" /></title>
+</head>
 
-    <ui:composition template="/templates/_template.xhtml">
-    
-        <ui:define name="corpo">
-        
-            <h:form id="register-user">
-            
-            	<h2>
-					<h:outputText value="Registro" rendered="#{empty userMB.user.id}" />
-	
-					<h:outputText value="Editar Dados" rendered="#{not empty userMB.user.id}" />
-				</h2>
+<ui:composition template="/templates/_template.xhtml">
 
-                <p:messages styleClass="erros"/>
+	<ui:define name="corpo">
 
-                <!-- Dados do Cliente -->
-                <p:fieldset legend="Dados Pessoais">
-                
-                    <h:outputLabel value="Nome" for="nome"/>
-                    <p:inputText id="nome" value="#{userMB.user.client.name}" required="true" requiredMessage="O nome é obrigatório." />
+		<h:form id="register-user">
 
-                    <h:outputLabel value="CPF" for="cpf"/>
-                    <p:inputMask id="cpf" value="#{userMB.user.client.cpf}" mask="999.999.999-99" required="true" requiredMessage="O CPF é obrigatório." />
-					
-                    <h:outputLabel value="E-mail" for="email"/>
-                    <p:inputText id="email" value="#{userMB.user.client.email}" disabled="#{not empty userMB.user.id}" required="true" requiredMessage="O e-mail é obrigatório." />
+			<h2>
+				<h:outputText value="Registro" rendered="#{empty userMB.user.id}" />
 
-                    <h:outputLabel value="Celular" for="celular"/>
-                    <p:inputMask id="celular" value="#{userMB.user.client.phoneNumber}" mask="(99) 99999-9999" required="true" requiredMessage="O celular é obrigatório." />
-                    
-                </p:fieldset>
+				<h:outputText value="Editar Dados"
+					rendered="#{not empty userMB.user.id}" />
+			</h2>
 
-                <!-- Dados do Funcionário -->
-                <p:fieldset legend="Dados de Acesso">
-                
-                    <h:outputLabel value="Login" for="login"/>
-                    <p:inputText id="login" value="#{userMB.user.login}" required="true" requiredMessage="O login é obrigatório." />
+			<p:commandButton value="Ver Pedidos"
+				rendered="#{not empty userMB.user.id}" action="#{userMB.orders}"
+				update="pedidosForm" oncomplete="PF('pedidosDialog').show()"
+				styleClass="button-user" />
 
-                    <h:outputLabel value="Senha" for="senha"/>
-                    <p:password id="senha" value="#{userMB.user.password}" required="true" requiredMessage="A senha é obrigatória." />
-                    
-                </p:fieldset>
+			<p:messages styleClass="erros" />
 
-                <!-- Botões dinâmicos -->
-                <p:commandButton value="Cadastrar" action="#{userMB.addUser}" update="register-user" rendered="#{empty userMB.user.id}" styleClass="button-user"/>
-                
-                <!-- Botões de Editar e Cancelar -->
-                <p:commandButton value="Editar" action="#{userMB.addUser}" update="register-user" rendered="#{not empty userMB.user.id}" styleClass="button-user"/>
-                <p:commandButton value="Cancelar" action="#{userMB.cancelEdit}" update="register-user" rendered="#{not empty userMB.user.id}" immediate="true" styleClass="button-user cancel-button"/>
-            </h:form>
-        </ui:define>
-    </ui:composition>
+			<!-- Dados do Cliente -->
+			<p:fieldset legend="Dados Pessoais">
+
+				<h:outputLabel value="Nome" for="nome" />
+				<p:inputText id="nome" value="#{userMB.user.client.name}"
+					required="true" requiredMessage="O nome é obrigatório." />
+
+				<h:outputLabel value="CPF" for="cpf" />
+				<p:inputMask id="cpf" value="#{userMB.user.client.cpf}"
+					mask="999.999.999-99" required="true"
+					requiredMessage="O CPF é obrigatório." />
+
+				<h:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" value="#{userMB.user.client.email}"
+					disabled="#{not empty userMB.user.id}" required="true"
+					requiredMessage="O e-mail é obrigatório." />
+
+				<h:outputLabel value="Celular" for="celular" />
+				<p:inputMask id="celular" value="#{userMB.user.client.phoneNumber}"
+					mask="(99) 99999-9999" required="true"
+					requiredMessage="O celular é obrigatório." />
+
+			</p:fieldset>
+
+			<!-- Dados do Funcionário -->
+			<p:fieldset legend="Dados de Acesso">
+
+				<h:outputLabel value="Login" for="login" />
+				<p:inputText id="login" value="#{userMB.user.login}" required="true"
+					requiredMessage="O login é obrigatório." />
+
+				<h:outputLabel value="Senha" for="senha" />
+				<p:password id="senha" value="#{userMB.user.password}"
+					required="true" requiredMessage="A senha é obrigatória." />
+
+			</p:fieldset>
+
+			<!-- Botões dinâmicos -->
+			<p:commandButton value="Cadastrar" action="#{userMB.addUser}"
+				update="register-user" rendered="#{empty userMB.user.id}"
+				styleClass="button-user" />
+
+			<!-- Botões de Editar e Cancelar -->
+			<p:commandButton value="Editar" action="#{userMB.addUser}"
+				update="register-user" rendered="#{not empty userMB.user.id}"
+				styleClass="button-user" />
+			<p:commandButton value="Cancelar" action="#{userMB.cancelEdit}"
+				update="register-user" rendered="#{not empty userMB.user.id}"
+				immediate="true" styleClass="button-user cancel-button" />
+
+			<p:dialog widgetVar="pedidosDialog" modal="true"
+				header="Pedidos do Usuário" resizable="false" width="800">
+				<h:form id="pedidosForm">
+					<p:dataTable id="pedidosTable" value="#{userMB.orders}"
+						var="pedido" emptyMessage="Nenhum pedido encontrado.">
+						
+						<!-- Colunas do Pedido -->
+						<p:column headerText="ID do Pedido">
+							<h:outputText value="#{pedido.id}" />
+						</p:column>
+						
+						<p:column headerText="Data do Pedido">
+							<h:outputText value="#{pedido.dateOrder}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column headerText="Valor Total">
+							<h:outputText value="#{pedido.totalPrice}">
+								<f:convertNumber type="currency" currencySymbol="R$" />
+							</h:outputText>
+						</p:column>
+
+						<!-- Coluna para Itens do Pedido -->
+						<p:column headerText="Itens do Pedido">
+							<p:dataTable value="#{pedido.itensOrder}" var="item"
+								styleClass="inner-table">
+								
+								<p:column headerText="Produto">
+									<h:outputText value="#{item.book.title}" />
+								</p:column>
+								
+								<p:column headerText="Quantidade">
+									<h:outputText value="#{item.amount}" />
+								</p:column>
+								<p:column headerText="Preço Unitário">
+									<h:outputText value="#{item.book.price}">
+										<f:convertNumber type="currency" currencySymbol="R$" />
+									</h:outputText>
+								</p:column>
+								<p:column headerText="Subtotal">
+									<h:outputText value="#{item.totalPrice}">
+										<f:convertNumber type="currency" currencySymbol="R$" />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
 </html>

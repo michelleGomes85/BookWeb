@@ -1,12 +1,16 @@
 package br.tsi.daw.mb;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import br.tsi.daw.dao.DAO;
+import br.tsi.daw.dao.OrderDAO;
 import br.tsi.daw.dao.UserDAO;
 import br.tsi.daw.enuns.Profile;
 import br.tsi.daw.model.Client;
+import br.tsi.daw.model.Order;
 import br.tsi.daw.model.User;
 import br.tsi.daw.utils.EmailTemplateUtils;
 import br.tsi.daw.utils.SendEmailUtils;
@@ -15,6 +19,9 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+/**
+ * 
+ */
 @SessionScoped
 @Named("userMB")
 public class UserMB implements Serializable {
@@ -24,6 +31,8 @@ public class UserMB implements Serializable {
     private User user;
     private User userSession;
     private boolean admin;
+    
+    private List<Order> orders = new ArrayList<>();
     
     @Inject
     private NavigationMB navigationMB;
@@ -37,6 +46,8 @@ public class UserMB implements Serializable {
     	
         DAO<User> userDao = new DAO<>(User.class);
 
+        String sessionToken = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("sessionToken");
+
         if (user.getId() == null) {
         	
             String token = UUID.randomUUID().toString();
@@ -45,18 +56,19 @@ public class UserMB implements Serializable {
             user.setProfile((admin) ? Profile.FUNC : Profile.USER);
             userDao.add(user);
 
-            String confirmLink = "http://localhost:8080/LibraryVirtual/pages/confirm.xhtml?token=" + token;
-            
+            String confirmLink = "http://localhost:8080/LibraryVirtual/pages/confirm.xhtml?token=" + token + "&sessionToken=" + sessionToken;
+
             StringBuilder emailContent = EmailTemplateUtils.getConfirmationEmail(user.getLogin(), user.getProfile().getDescription(), confirmLink);
-            
+
             SendEmailUtils.sendEmail(user.getClient().getEmail(), "Confirmação de Cadastro", emailContent);
-            
+
             this.user = new User();
             this.user.setClient(new Client());
-        } else
+        } else {
             userDao.update(user);
+        }
 
-        return "login?faces-redirect=true";
+        return navigationMB.toLogin();
     }
     
     private String redirectToLibrary() {
@@ -130,5 +142,16 @@ public class UserMB implements Serializable {
     
 	public String userData() {
 		return navigationMB.toUserRegistration();
+	}
+	
+	public List<Order> getOrders() {
+		if (userSession != null && userSession.getClient() != null)
+			this.orders = new OrderDAO().findOrderByUser(userSession);
+		
+		return this.orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 }

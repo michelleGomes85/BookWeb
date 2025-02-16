@@ -33,7 +33,7 @@ public class Order {
     @JoinColumn(name = "client_id")
 	private Client client;
     
-    @OneToMany(cascade=CascadeType.PERSIST, mappedBy="order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<ItemOrder> itensOrder;
 
 	public Long getId() {

@@ -47,9 +47,9 @@ public class SendEmailUtils {
 	 * OBS.: Verificação de duas etapas tem que estar ativa
 	 * 
 	 * */
-	private static final String from = "michelletestegomes@gmail.com";
-	private static final String username = "michelletestegomes@gmail.com";
-	private static final String password = "txxh hwxc pqzv qwhc";
+	private static final String from = "";
+	private static final String username = "";
+	private static final String password = "";
 	private static final String host = "smtp.gmail.com";
 	
 	/**

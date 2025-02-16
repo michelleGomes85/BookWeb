@@ -92,3 +92,23 @@ legend {
 .cancel-button {
 	margin-left: 30px !important;
 }
+
+.inner-table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.inner-table .ui-datatable-header {
+    display: none;
+}
+
+.inner-table .ui-datatable-data tr td {
+    border: none;
+    padding: 5px;
+}
+
+body .ui-dialog {
+	width: auto !important;
+}

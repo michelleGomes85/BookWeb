@@ -52,6 +52,10 @@ body .ui-menu {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.icon {
+	text-align: center;
+}
+
 .icon img {
     width: 50px;
     filter: invert(1);
@@ -75,6 +79,11 @@ body .ui-menu {
     display: flex;
     justify-content: center;
     flex-grow: 1;
+}
+
+.name-user {
+	text-align: center;
+	margin-top: 10px;
 }
 
 .menu-right {
@@ -103,11 +112,12 @@ body .ui-menu {
 
 #header .p-menuitem-icon {
     margin-right: 8px;
+    
 }
 
 /* Conteúdo principal */
 #conteudo {
-    padding-top: 150px;
+    padding-top: 250px !important;
     min-height: 80vh;
     padding-bottom: 100px;
     
@@ -190,4 +200,32 @@ body .ui-selectonemenu {
 .spinner-library {
 	margin-left: 240px !important;
 	padding-right: 10px !important;
+}
+
+body .ui-button.rounded-button.ui-button-icon-only {
+	margin: 10px;
+}
+
+label {
+	margin: 10px 0px 10px !important;
+	display: block;
+}
+
+body .ui-dialog.ui-resizable .ui-dialog-content {
+	width: 650px;
+}
+
+body .ui-datatable .ui-datatable-data>tr>td {
+	text-align: center;
+}
+
+#confirm {
+	font-size: 30px;
+	font-weight: bold;
+	line-height: 3rem;
+}
+
+#confirm ul {
+	text-decoration: none;
+	list-style-type: none;
 }

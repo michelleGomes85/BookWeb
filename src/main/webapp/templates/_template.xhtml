@@ -8,7 +8,11 @@
 
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	
 	<title>Livraria Virtual</title>
+	
+    <link rel="icon" type="image/x-icon" href="#{resource['images:fav.png']}" />
+	
 
 	<!-- PrimeFaces e estilos -->
 	<h:outputStylesheet name="styles_template.css" library="css" />
@@ -55,6 +59,9 @@
 				<p:menuitem value="#{userMB.user.login}" rendered="#{not empty userMB.user.login}" styleClass="menu-right" action="#{navigationMB.toUserRegistration}">
 					<div class="icon">
 						<h:graphicImage name="logged-in-user.png" library="images" />
+					        <div class="name-user">
+           						Bem vindo #{userMB.user.login}
+       						</div>
 					</div>
 				</p:menuitem>
 

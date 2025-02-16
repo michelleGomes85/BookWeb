@@ -13,6 +13,9 @@
 	<ui:define name="corpo">
 
 		<h:form id="cartForm">
+		
+			<p:growl id="messages" showDetail="true" />
+		
 			<p:dataTable id="cartTable" widgetVar="cartTable" var="item" value="#{orderMB.cart}">
 
 				<f:facet name="header">
@@ -64,7 +67,8 @@
 				<!-- Botão de Finalizar Compra -->
 				<p:commandButton value="Finalizar Compra" icon="pi pi-check"
 					action="#{orderMB.finalizeOrder}" disabled="#{empty orderMB.cart}"
-					styleClass="p-button-success" />
+					styleClass="p-button-success" process="@this" update="cartForm"
+					onclick="this.disabled = true;" />
 			</div>
 		</h:form>
 

@@ -16,9 +16,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "user_app")
 public class User {
-	
 	@Id
-	@SequenceGenerator(name="user_id", sequenceName="user_seq", allocationSize=1)
+	@SequenceGenerator(name="user_id", sequenceName="user_seq", allocationSize=1, initialValue = 2)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="user_id")
 	private Long id;
 	

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import br.tsi.daw.model.User; 
+import br.tsi.daw.enuns.Profile;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +23,14 @@ public class AutorizadorFilter extends HttpFilter implements Filter {
     private static final long serialVersionUID = 1L;
 
     // Lista de páginas que precisam de autenticação
-    private static final List<String> paginasProtegidas = Arrays.asList(
+    private static final List<String> PROTECTED_PAGES = Arrays.asList(
+            "/books.xhtml",
+            "/categories.xhtml",
+            "/employee.xhtml"
+    );
+
+    // Páginas permitidas para o perfil FUNC
+    private static final List<String> FUNC_ALLOWED_PAGES = Arrays.asList(
             "/books.xhtml",
             "/categories.xhtml"
     );
@@ -36,23 +45,44 @@ public class AutorizadorFilter extends HttpFilter implements Filter {
 
         String requestURI = req.getRequestURI();
 
-        // Verifica se a página acessada está na lista de páginas protegidas
-        boolean isPaginaProtegida = paginasProtegidas.stream().anyMatch(requestURI::endsWith);
+        boolean isPageProtected = PROTECTED_PAGES.stream().anyMatch(requestURI::endsWith);
 
-        // Se a página não for protegida, permite o acesso
-        if (!isPaginaProtegida) {
+        if (!isPageProtected) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Verifica se o usuário está logado
-        boolean logado = (session != null && session.getAttribute("userLogin") != null);
+        boolean logged = (session != null && session.getAttribute("userLogin") != null);
 
-        if (!logado) {
+        if (!logged) {
             res.sendRedirect(req.getContextPath() + "/pages/login.xhtml");
             return;
         }
 
-        chain.doFilter(request, response);
+        User userLogin = (User) session.getAttribute("userLogin");
+
+        // Verifica as permissões com base no perfil do usuário
+        if (userLogin != null) {
+        	
+            Profile userProfile = userLogin.getProfile();
+
+            switch (userProfile) {
+                case ADMIN:
+                    chain.doFilter(request, response);
+                    break;
+
+                case FUNC:
+                    if (FUNC_ALLOWED_PAGES.stream().anyMatch(requestURI::endsWith))
+                        chain.doFilter(request, response);
+                    else 
+                    	res.sendRedirect(req.getContextPath() + "/pages/login.xhtml");
+                    break;
+                case USER:
+                	res.sendRedirect(req.getContextPath() + "/pages/login.xhtml");
+                    break;
+            }
+        } else {
+        	res.sendRedirect(req.getContextPath() + "/pages/login.xhtml");
+        }
     }
 }

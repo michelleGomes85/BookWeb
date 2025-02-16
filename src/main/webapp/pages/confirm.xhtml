@@ -14,15 +14,14 @@
 
 	<ui:define name="corpo">
 
-		<h:form>
+		<h:form id="confirm">
 			<h:messages globalOnly="true" showDetail="true" />
 
 			<h:outputText value="Confirmando seu cadastro..." />
 
 			<f:metadata>
 				<f:viewParam name="token" value="#{confirmUserMB.token}" />
-				<f:event listener="#{confirmUserMB.confirmUser()}"
-					type="preRenderView" />
+				<f:event listener="#{confirmUserMB.confirmUser()}" type="preRenderView" />
 			</f:metadata>
 		</h:form>
 
