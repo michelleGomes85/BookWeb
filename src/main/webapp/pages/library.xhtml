@@ -77,9 +77,8 @@
 								</h:outputText>
 							</div>
 							
-							<div class="book-status" rendered="#{book.quantityStock == 0}">
-								Sem estoque
-							</div>
+							<h:outputText value="Sem estoque" class="book-status" rendered="#{book.quantityStock == 0}">
+							</h:outputText>
 						</div>
 
 						<!-- Botão de ação e Spinner -->
